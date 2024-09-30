@@ -1,5 +1,5 @@
-// ClienteRepository.js
-const Cliente = require('../entities/Client'); // Asegúrate de que la entidad Cliente esté definida
+
+const Cliente = require('../entities/Client'); 
 
 class ClienteRepository {
     constructor(dataSource) {
@@ -8,13 +8,17 @@ class ClienteRepository {
     }
 
     async createCliente(data) {
-        const cliente = this.repository.create(data); // Crea una nueva instancia del cliente
-        await this.repository.save(cliente); // Guarda el cliente en la base de datos
-        return cliente; // Retorna el cliente creado
+        const cliente = this.repository.create(data);
+        await this.repository.save(cliente);
+        return cliente;
     }
 
     async findByDocumentAndPhone(documento, celular) {
-        return await this.repository.findOne({ where: { documento, celular } });
+        return await this.repository.findOne({ where: { documento:documento, celular:celular } });
+    }
+
+    async updateClienteSaldo(cliente) {
+        return await this.repository.save(cliente);
     }
 }
 

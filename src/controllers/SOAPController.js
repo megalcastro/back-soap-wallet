@@ -26,6 +26,15 @@ const soapMethods = {
                 } catch (error) {
                     return { mensaje: 'Error al consultar saldo', error };
                 }
+            },
+            recargarBilletera: async function (args) {
+                console.log(args);
+                try {
+                    const resultado = await clienteService.recargarBilletera(args.documento, args.celular, args.valor);
+                    return resultado;
+                } catch (error) {
+                    return { mensaje: 'Error al recargar billetera', error: error.message };
+                }
             }
         }
     }

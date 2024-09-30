@@ -35,6 +35,24 @@ class ClienteService {
             throw new Error('Error al consultar saldo');
         }
     }
+
+    async recargarBilletera(documento, celular, valor) {
+        const cliente = await this.clienteRepository.findByDocumentAndPhone(documento, celular);
+        if (!cliente) {
+            throw new Error('Cliente no encontrado');
+        }
+    
+        const saldoActual = Number(cliente.saldo); 
+        const valorRecarga = Number(valor); 
+    
+        cliente.saldo = saldoActual + valorRecarga;
+    
+        await this.clienteRepository.updateClienteSaldo(cliente);
+    
+        return { mensaje: 'Recarga exitosa', saldo: cliente.saldo };
+    }
+    
+    
 }
 
 module.exports = ClienteService;
