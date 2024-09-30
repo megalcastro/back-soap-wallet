@@ -25,6 +25,10 @@ module.exports = new EntitySchema({
             type: 'timestamp',
             default: () => 'CURRENT_TIMESTAMP',
         },
+        updatedAt: {
+            type: 'timestamp',
+            default: () => 'CURRENT_TIMESTAMP',
+        },
     },
     relations: {
         client: {

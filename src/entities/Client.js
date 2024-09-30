@@ -35,6 +35,14 @@ module.exports = new EntitySchema({
             type: 'varchar',
             nullable: true,
         },
+        createdAt: {
+            type: 'timestamp',
+            default: () => 'CURRENT_TIMESTAMP',
+        },
+        updatedAt: {
+            type: 'timestamp',
+            default: () => 'CURRENT_TIMESTAMP',
+        },
     },
     relations: {
         purchases: {

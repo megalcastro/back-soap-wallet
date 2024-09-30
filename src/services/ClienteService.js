@@ -1,12 +1,14 @@
 // ClienteService.js
 const AppDataSource = require('../config/data-source');
 const ClienteRepository = require('../repositories/ClienteRepository');
+const PurchaseRepository = require('../repositories/PurchaseRepository');
 const nodemailer = require('nodemailer');
 const { generarSessionId, generarToken } = require('../utils/utils');
 
 class ClienteService {
     constructor() {
         this.clienteRepository = new ClienteRepository(AppDataSource);
+        this.purchaseRepository = new PurchaseRepository(AppDataSource);
     }
 
     async registroCliente(data) {
@@ -56,6 +58,7 @@ class ClienteService {
     
     async pagarCompra(documento, celular, monto) {
         const cliente = await this.clienteRepository.findByDocumentAndPhone(documento, celular);
+        const purchase = this.purchaseRepository;
         if (!cliente) {
             throw new Error('Cliente no encontrado');
         }
@@ -69,6 +72,7 @@ class ClienteService {
 
         cliente.token = token;
         cliente.sessionId = sessionId;
+        await purchase.createPurchase({sessionId, amount:monto ,clientId:cliente.id});
         await this.clienteRepository.updateCliente(cliente);
 
         await this.enviarCorreoToken(cliente.email, token);
@@ -96,12 +100,15 @@ class ClienteService {
     }
 
     async confirmarCompra(sessionId, token) {
+
         const cliente = await this.clienteRepository.findOne({ where: { sessionId, token } });
+        const purchase = await this.purchaseRepository.findOnePurchase({ sessionId , clientId:cliente.id });
+        console.log('compra');
         if (!cliente) {
             throw new Error('Token o sesión inválidos');
         }
 
-        cliente.saldo -= monto; 
+        cliente.saldo -= purchase.amount; 
         cliente.token = null;
         cliente.sessionId = null;
         await this.clienteRepository.updateCliente(cliente);

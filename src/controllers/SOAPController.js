@@ -46,6 +46,7 @@ const soapMethods = {
             },
             
             confirmarCompra: async function (args) {
+                console.log(args);
                 try {
                     const resultado = await clienteService.confirmarCompra(args.sessionId, args.token);
                     return resultado;
