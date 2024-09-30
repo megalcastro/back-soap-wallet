@@ -1,6 +1,8 @@
 // ClienteService.js
 const AppDataSource = require('../config/data-source');
 const ClienteRepository = require('../repositories/ClienteRepository');
+const nodemailer = require('nodemailer');
+const { generarSessionId, generarToken } = require('../utils/utils');
 
 class ClienteService {
     constructor() {
@@ -47,11 +49,65 @@ class ClienteService {
     
         cliente.saldo = saldoActual + valorRecarga;
     
-        await this.clienteRepository.updateClienteSaldo(cliente);
+        await this.clienteRepository.updateCliente(cliente);
     
         return { mensaje: 'Recarga exitosa', saldo: cliente.saldo };
     }
     
+    async pagarCompra(documento, celular, monto) {
+        const cliente = await this.clienteRepository.findByDocumentAndPhone(documento, celular);
+        if (!cliente) {
+            throw new Error('Cliente no encontrado');
+        }
+
+        if (cliente.saldo < monto) {
+            throw new Error('Saldo insuficiente');
+        }
+
+        const token = generarToken();
+        const sessionId = generarSessionId();
+
+        cliente.token = token;
+        cliente.sessionId = sessionId;
+        await this.clienteRepository.updateCliente(cliente);
+
+        await this.enviarCorreoToken(cliente.email, token);
+
+        return { mensaje: 'Correo enviado con el token de confirmación', sessionId };
+    }
+
+    async enviarCorreoToken(email, token) {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Token de confirmación para el pago',
+            text: `Tu token de confirmación es: ${token}`,
+        };
+
+        await transporter.sendMail(mailOptions);
+    }
+
+    async confirmarCompra(sessionId, token) {
+        const cliente = await this.clienteRepository.findOne({ where: { sessionId, token } });
+        if (!cliente) {
+            throw new Error('Token o sesión inválidos');
+        }
+
+        cliente.saldo -= monto; 
+        cliente.token = null;
+        cliente.sessionId = null;
+        await this.clienteRepository.updateCliente(cliente);
+
+        return { mensaje: 'Compra confirmada y saldo descontado' };
+    }
     
 }
 

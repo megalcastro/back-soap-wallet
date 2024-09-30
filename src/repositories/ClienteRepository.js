@@ -17,8 +17,12 @@ class ClienteRepository {
         return await this.repository.findOne({ where: { documento:documento, celular:celular } });
     }
 
-    async updateClienteSaldo(cliente) {
+    async updateCliente(cliente) {
         return await this.repository.save(cliente);
+    }
+
+    async findOne (data){
+        return await this.repository.findOne(data);
     }
 }
 

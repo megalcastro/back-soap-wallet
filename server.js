@@ -1,3 +1,4 @@
+require('dotenv').config();
 const http = require('http');
 const AppDataSource = require('./src/config/data-source');
 const startSoapServer = require('./src/controllers/SOAPController');
@@ -7,7 +8,7 @@ const server = http.createServer();
 AppDataSource.initialize()
     .then(() => {
         console.log('Database initialized');
-        startSoapServer(server); // Inicia el servidor SOAP aquí
+        startSoapServer(server);
         server.listen(3000, () => {
             console.log('Server is running on http://localhost:3000');
         });

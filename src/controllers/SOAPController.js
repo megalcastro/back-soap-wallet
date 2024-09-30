@@ -35,14 +35,31 @@ const soapMethods = {
                 } catch (error) {
                     return { mensaje: 'Error al recargar billetera', error: error.message };
                 }
+            },
+            pagarCompra: async function (args) {
+                try {
+                    const resultado = await clienteService.pagarCompra(args.documento, args.celular, args.monto);
+                    return resultado;
+                } catch (error) {
+                    return { mensaje: 'Error al procesar el pago', error: error.message };
+                }
+            },
+            
+            confirmarCompra: async function (args) {
+                try {
+                    const resultado = await clienteService.confirmarCompra(args.sessionId, args.token);
+                    return resultado;
+                } catch (error) {
+                    return { mensaje: 'Error al confirmar la compra', error: error.message };
+                }
             }
         }
     }
 };
 
 function startSoapServer(server) {
-    const wsdlPath = path.resolve(__dirname, '../wsdl/service.wsdl'); // Ajusta la ruta al archivo WSDL
-    const wsdl = fs.readFileSync(wsdlPath, 'utf8'); // Carga el archivo WSDL
+    const wsdlPath = path.resolve(__dirname, '../wsdl/service.wsdl');
+    const wsdl = fs.readFileSync(wsdlPath, 'utf8');
 
     soap.listen(server, '/soap', soapMethods, wsdl, function() {
         console.log('SOAP server is running on http://localhost:3000/soap');

@@ -9,8 +9,8 @@ const AppDataSource = new DataSource({
     username: 'root',
     password: 'root1234',
     database: 'app_wallet',
-    synchronize: true, // Cambiar a false en producción
-    entities: [Client], // Asegúrate de agregar el esquema aquí
+    synchronize: true,
+    entities: [Client],
 });
 
 module.exports = AppDataSource;
