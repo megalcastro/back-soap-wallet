@@ -15,11 +15,12 @@ class PurchaseRepository {
 
 
     async updatePurchase(data) {
-        return await this.repository.save(purchase);
+        return await this.repository.save(data);
     }
 
     async findOnePurchase (data){
-        return await this.repository.findOne(data);
+        const { sessionId , clientId } = data;
+        return await this.repository.findOne({ where: { sessionId, clientId } });
     }
 }
 

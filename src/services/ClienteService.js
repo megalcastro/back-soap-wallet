@@ -108,7 +108,9 @@ class ClienteService {
             throw new Error('Token o sesión inválidos');
         }
 
-        cliente.saldo -= purchase.amount; 
+        const discount = purchase.amount;
+
+        cliente.saldo -= discount;
         cliente.token = null;
         cliente.sessionId = null;
         await this.clienteRepository.updateCliente(cliente);
