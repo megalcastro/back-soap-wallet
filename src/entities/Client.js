@@ -36,4 +36,11 @@ module.exports = new EntitySchema({
             nullable: true,
         },
     },
+    relations: {
+        purchases: {
+            target: 'Purchase',
+            type: 'one-to-many',
+            inverseSide: 'client',
+        },
+    },
 });

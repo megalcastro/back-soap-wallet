@@ -1,6 +1,8 @@
 // data-source.js
 const { DataSource } = require('typeorm');
-const Client = require('../entities/Client'); // Ajusta la ruta según tu estructura de carpetas
+const Client = require('../entities/Client');
+const Purchase = require('../entities/Purchase');
+
 
 const AppDataSource = new DataSource({
     type: 'mysql',
@@ -10,7 +12,7 @@ const AppDataSource = new DataSource({
     password: 'root1234',
     database: 'app_wallet',
     synchronize: true,
-    entities: [Client],
+    entities: [Client,Purchase],
 });
 
 module.exports = AppDataSource;
