@@ -1,8 +1,9 @@
 const routes = require('express').Router();
-const { createCustomer } = require('../controllers/client.controller');
+const { createCustomer,rechargeWalletClient } = require('../controllers/client.controller');
 
 
 routes.post('/registroCliente',createCustomer);
 
+routes.post('/recargarBilletera',rechargeWalletClient);
 
 module.exports = routes;

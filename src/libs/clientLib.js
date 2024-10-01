@@ -12,6 +12,28 @@ const customerRegistration = (args) => {
                 if (err) {
                     return reject(err);
                 }
+
+                if(result.success == 'false') {
+                    reject(result);
+                }   
+                
+                resolve(result);
+            });
+        });
+    });
+}
+
+const rechargeWallet = (args) => {
+    return new Promise((resolve, reject) => {
+        soap.createClient(url, (err, client) => {
+            if (err) {
+                return reject(err);
+            }
+
+            client.recargarBilletera(args, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
                 
                 if(result.success == 'false') {
                     reject(result);
@@ -23,4 +45,5 @@ const customerRegistration = (args) => {
     });
 }
 
-module.exports = { customerRegistration };
+
+module.exports = { customerRegistration, rechargeWallet };
