@@ -18,43 +18,59 @@ const soapMethods = {
                     return {
                         success: false,
                         cod_error: '01',
-                        message_error: error.message || 'Error al crear el cliente'  // Usar el mensaje de error
+                        message_error: error.message || 'Error al crear el cliente'
                     };
                 }
             },            
             consultarSaldo: async function (args) {
                 try {
-                    const cliente = await clienteService.consultarSaldo(args.documento, args.celular);
-                    return { saldo: cliente ? cliente.saldo : 0 };
+                    const saldo = await clienteService.consultarSaldo(args.documento, args.celular);
+                    return { success: true, cod_error: '00', message_error: '' ,saldo:saldo.saldo};
                 } catch (error) {
-                    return { mensaje: 'Error al consultar saldo', error };
+                    return {
+                        success: false,
+                        cod_error: '02',
+                        message_error: error.message || 'Error al consultar saldo'
+                    };
                 }
             },
             recargarBilletera: async function (args) {
                 console.log(args);
                 try {
-                    const resultado = await clienteService.recargarBilletera(args.documento, args.celular, args.valor);
-                    return resultado;
+                    const result = await clienteService.recargarBilletera(args.documento, args.celular, args.valor);
+                    return { success: true, cod_error: '00', message_error: '',result };
                 } catch (error) {
-                    return { mensaje: 'Error al recargar billetera', error: error.message };
+                    return {
+                        success: false,
+                        cod_error: '03',
+                        message_error: error.message || 'Error al recargar billetera'
+                    };
                 }
             },
             pagarCompra: async function (args) {
                 try {
-                    const resultado = await clienteService.pagarCompra(args.documento, args.celular, args.monto);
-                    return resultado;
+                    const result = await clienteService.pagarCompra(args.documento, args.celular, args.monto);
+                    return { success: true, cod_error: '00', message_error: '',result };
                 } catch (error) {
-                    return { mensaje: 'Error al procesar el pago', error: error.message };
+                    return {
+                        success: false,
+                        cod_error: '04',
+                        message_error: error.message || 'Error al pagar compra'
+                    };
                 }
             },
             
             confirmarCompra: async function (args) {
                 console.log(args);
                 try {
-                    const resultado = await clienteService.confirmarCompra(args.sessionId, args.token);
-                    return resultado;
+                    const result = await clienteService.confirmarCompra(args.sessionId, args.token);
+                    return { success: true, cod_error: '00', message_error: '',result };
                 } catch (error) {
-                    return { mensaje: 'Error al confirmar la compra', error: error.message };
+                    return {
+                        success: false,
+                        cod_error: '05',
+                        message_error: error.message || 'Error al confirmar compra'
+                    };
                 }
             }
         }

@@ -34,8 +34,7 @@ class ClienteService {
             const cliente = await this.clienteRepository.findByDocumentAndPhone(documento, celular);
             return cliente;
         } catch (error) {
-            console.error('Error al consultar saldo:', error);
-            throw new Error('Error al consultar saldo');
+            throw new Error(`Error al consultar saldo ${error.message}`);
         }
     }
 
@@ -45,6 +44,7 @@ class ClienteService {
             throw new Error('Cliente no encontrado');
         }
     
+        try {
         const saldoActual = Number(cliente.saldo); 
         const valorRecarga = Number(valor); 
     
@@ -53,6 +53,10 @@ class ClienteService {
         await this.clienteRepository.updateCliente(cliente);
     
         return { mensaje: 'Recarga exitosa', saldo: cliente.saldo };
+            
+        } catch (error) {
+            throw new Error(`Error al recargar billetera ${error.message}`);
+        }
     }
     
     async pagarCompra(documento, celular, monto) {
@@ -66,6 +70,8 @@ class ClienteService {
             throw new Error('Saldo insuficiente');
         }
 
+        try {
+
         const token = generarToken();
         const sessionId = generarSessionId();
 
@@ -77,6 +83,10 @@ class ClienteService {
         await this.enviarCorreoToken(cliente.email, token);
 
         return { mensaje: 'Correo enviado con el token de confirmación', sessionId };
+            
+        } catch (error) {
+            throw new Error(`Error al pagar compra ${error.message}`);
+        }
     }
 
     async enviarCorreoToken(email, token) {
@@ -107,6 +117,7 @@ class ClienteService {
             throw new Error('Token o sesión inválidos');
         }
 
+        try {
         const discount = purchase.amount;
 
         cliente.saldo -= discount;
@@ -115,6 +126,11 @@ class ClienteService {
         await this.clienteRepository.updateCliente(cliente);
 
         return { mensaje: 'Compra confirmada y saldo descontado' };
+            
+        } catch (error) {
+            throw new Error(`Error al confirmar compra ${error.message}`);
+        }
+        
     }
     
 }
