@@ -25,11 +25,11 @@ const soapMethods = {
             consultarSaldo: async function (args) {
                 try {
                     const saldo = await clienteService.consultarSaldo(args.documento, args.celular);
-                    return { success: true, cod_error: '00', message_error: '' ,saldo:saldo.saldo};
+                    return { success: true, cod_error: '00', message_error: '' ,saldo:saldo.saldo || 0};
                 } catch (error) {
                     return {
                         success: false,
-                        cod_error: '02',
+                        cod_error: '06',
                         message_error: error.message || 'Error al consultar saldo'
                     };
                 }

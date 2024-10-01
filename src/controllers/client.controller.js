@@ -51,7 +51,7 @@ const  rechargeWalletClient = async (req, res)  => {
         res.status(200).json({ success: true , cod_error:'00' , message_error:''});
     
     } catch (message_error) {
-        res.status(500).json({ success: false , cod_error:'02' , message_error });
+        res.status(500).json({ success: false , cod_error:'03' , message_error });
     }
 }
 
@@ -76,7 +76,7 @@ const  paidPurchaseClient = async (req, res)  => {
         res.status(200).json({ success: true , cod_error:'00' , message_error:'',result});
     
     } catch (message_error) {
-        res.status(500).json({ success: false , cod_error:'03' , message_error,result:'' });
+        res.status(500).json({ success: false , cod_error:'04' , message_error,result:'' });
     }
 }
 
@@ -99,7 +99,7 @@ const  confirmPurchaseClient = async (req, res)  => {
         res.status(200).json({ success: true , cod_error:'00' , message_error:'',result});
     
     } catch (message_error) {
-        res.status(500).json({ success: false , cod_error:'04' , message_error ,result:''});
+        res.status(500).json({ success: false , cod_error:'05' , message_error ,result:''});
     }
 }
 
@@ -122,7 +122,7 @@ const  checkBalanceClient = async (req, res)  => {
         res.status(200).json({ success: true , cod_error:'00' , message_error:'',result});
     
     } catch (message_error) {
-        res.status(500).json({ success: false , cod_error:'05' , message_error ,result:''});
+        res.status(500).json({ success: false , cod_error:'06' , message_error ,result:''});
     }
 }
 
