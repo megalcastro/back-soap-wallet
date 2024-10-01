@@ -3,7 +3,8 @@ const http = require('http');
 const express = require('express');
 const AppDataSource = require('./src/config/data-source');
 const startSoapServer = require('./src/controllers/SOAPController');
-const restApiRoutes = require('./src/routes/restApiRoutes'); // Asumiendo que tienes rutas REST
+/* Rutas REST */
+const restApiRoutes = require('./src/routes/restApiRoutes');
 
 
 
@@ -11,11 +12,14 @@ const app = express();
 app.use(express.json());
 app.use('/api', restApiRoutes);
 
+const PORT = process.env.PORT;
+
 const server = http.createServer(app);
-server.listen(3000, () => {
+server.listen(PORT, () => {
     AppDataSource.initialize()
         .then(() => {
             console.log('Database initialized');
+            console.log(`initialized REST-API on http://localhost:${PORT}/api`);
             startSoapServer(server);
         })
         .catch((error) => {
@@ -23,7 +27,7 @@ server.listen(3000, () => {
         });
 });
 
-/* Rutas REST */
+
 
 
 
