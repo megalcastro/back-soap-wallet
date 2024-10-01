@@ -16,15 +16,14 @@ class ClienteService {
         if (!documento || !nombres || !email || !celular) {
             throw new Error('Todos los campos son requeridos');
         }
-
+    
         try {
             const cliente = await this.clienteRepository.createCliente(data);
             return cliente;
         } catch (error) {
-            console.error('Error al registrar cliente:', error);
-            throw new Error('Error al registrar cliente');
+            throw new Error(`Error al registrar cliente: ${error.message}`);
         }
-    }
+    }    
 
     async consultarSaldo(documento, celular) {
         if (!documento || !celular) {

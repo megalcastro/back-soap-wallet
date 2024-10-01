@@ -11,14 +11,17 @@ const soapMethods = {
     WalletService: {
         WalletServicePort: {
             registroCliente: async function (args) {
-                console.log('->',args);
                 try {
                     const cliente = await clienteService.registroCliente(args);
-                    return { mensaje: 'Cliente registrado', id: cliente.id };
+                    return { success: true, cod_error: '00', message_error: '' };
                 } catch (error) {
-                    return { mensaje: 'Error al registrar cliente', error };
+                    return {
+                        success: false,
+                        cod_error: '01',
+                        message_error: error.message || 'Error al crear el cliente'  // Usar el mensaje de error
+                    };
                 }
-            },
+            },            
             consultarSaldo: async function (args) {
                 try {
                     const cliente = await clienteService.consultarSaldo(args.documento, args.celular);
